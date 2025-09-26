@@ -4,9 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/interfaces";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Heart } from "lucide-react";
+import { ShoppingCart, Heart, Loader2 } from "lucide-react";
 import { renderStars } from "@/helpers/rating";
 import { formatPrice } from "@/helpers/currency";
+import { apiServices } from "@/services/api";
+import toast from 'react-hot-toast'
+import React, { useState } from "react";
+
 
 
 interface ProductCardProps {
@@ -14,7 +18,20 @@ interface ProductCardProps {
   viewMode?: "grid" | "list";
 }
 
+
+
+
 export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
+  const [isAdding, setIsAdding] = useState(false);
+  async function handleAddToCart() {
+    setIsAdding(true);
+    const data = await apiServices.addProductToCart(product!._id)
+    toast.success(data.message);
+    setIsAdding(false);
+
+  }
+
+
   if (viewMode === "list") {
     return (
       <div className="flex gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow  ">
@@ -30,14 +47,14 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
 
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start mb-2">
-        <h3 className="font-semibold text-lg line-clamp-2">
-          <Link
-            href={`/products/${product._id}`}
-            className="hover:text-primary transition-colors"
-          >
-            {product.title}
-          </Link>
-        </h3>
+            <h3 className="font-semibold text-lg line-clamp-2">
+              <Link
+                href={`/products/${product._id}`}
+                className="hover:text-primary transition-colors"
+              >
+                {product.title}
+              </Link>
+            </h3>
             <Button variant="ghost" size="sm">
               <Heart className="h-4 w-4" />
             </Button>
@@ -86,9 +103,8 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
                 </span>
               </div>
             </div>
-
-            <Button className="bg-orange-500">
-              <ShoppingCart className="h-4 w-4 mr-2 " />
+            <Button className=" bg-orange-500" size="sm" onClick={handleAddToCart}>
+              {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
               Add to Cart
             </Button>
           </div>
@@ -163,8 +179,8 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
         </div>
 
         {/* Add to Cart Button */}
-        <Button className="w-full bg-orange-500" size="sm">
-          <ShoppingCart className="h-4 w-4 mr-2 " />
+        <Button className="w-full bg-orange-500" size="sm" onClick={handleAddToCart}>
+                     {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
           Add to Cart
         </Button>
       </div>

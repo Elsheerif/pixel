@@ -12,7 +12,10 @@ import { renderStars } from "@/helpers/rating";
 import { SingleProductResponse } from "@/types";
 import { formatPrice } from "@/helpers/currency";
 import { apiServices } from "@/services/api";
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast'
+
+
+
 
 export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);

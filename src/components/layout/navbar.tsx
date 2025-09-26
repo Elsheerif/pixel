@@ -1,24 +1,36 @@
 "use client";
 
-
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
-import { Button } from "@/components";
+import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-} from "@/components";
+} from "@/components/ui/navigation-menu";
+import { apiServices } from "@/services/api";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
-import { Link } from "lucide-react";
-
-
+import React, { useState, useEffect } from "react";
 
 export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    async function fetchCart() {
+      try {
+        const cartData = await apiServices.getUserCart();
+        setCartCount(cartData.numOfCartItems || cartData.data?._id?.length || 0);
+      } catch (error) {
+        console.error('Failed to fetch cart:', error);
+        setCartCount(0);
+      }
+    }
+    fetchCart();
+  }, []);
 
   const navItems = [
     { href: "/products", label: "Products" },
@@ -31,9 +43,9 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
+          <Link href="/" className="flex items-center space-x-2">
             <img src="/logo.png" alt="Go Basket Logo" className="h-8 w-8" />
-            <span className="font-bold text-xl">Go Basket</span>
+            <span className="font-bold text-xl">Go Cart</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -69,13 +81,15 @@ export function Navbar() {
             </Button>
 
             {/* Shopping Cart */}
-            <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 aspect-square w-fit rounded-full bg-primary text-xs text-primary-foreground flex items-center justify-center">
-                99+
+            <Link href="/cart">
+              <Button variant="ghost" size="icon" className="relative">
+              <ShoppingCart className="h-5 w-5 " />
+              <span className="absolute bg-orange-500 top-1 -right-1 w-4 h-4 rounded-full text-xs text-white flex items-center justify-center">
+                {cartCount}
               </span>
               <span className="sr-only">Shopping cart</span>
             </Button>
+            </Link>
 
             {/* Mobile Menu */}
             <Button
