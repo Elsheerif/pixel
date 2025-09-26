@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
+
 import { usePathname } from "next/navigation";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { Button } from "@/components";
@@ -13,6 +12,8 @@ import {
 } from "@/components";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
+import { Link } from "lucide-react";
+
 
 
 export function Navbar() {
@@ -30,22 +31,16 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-1 ms-15">
-            <Image
-              src="/logo.png"
-              alt="Go Basket Logo"
-              width={32}
-              height={32}
-              className="h-10 w-10"
-            />
-            <span className="font-bold text-xl ">GoCart</span>
+          <Link to="/" className="flex items-center space-x-2">
+            <img src="/logo.png" alt="Go Basket Logo" className="h-8 w-8" />
+            <span className="font-bold text-xl">Go Basket</span>
           </Link>
 
           {/* Desktop Navigation */}
           <NavigationMenu className="hidden lg:flex">
             <NavigationMenuList>
               {navItems.map((navItem) => {
-                const isActive = pathname === navItem.href;
+                const isActive = pathname.startsWith(navItem.href);
                 return (
                   <NavigationMenuItem key={navItem.href}>
                     <NavigationMenuLink
@@ -53,7 +48,7 @@ export function Navbar() {
                       className={cn(
                         "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50",
                         isActive
-                          ? "bg-orange-500 text-white shadow-md font-semibold"
+                          ? "bg-primary text-primary-foreground shadow-md font-semibold"
                           : "bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                       )}
                     >
@@ -105,7 +100,7 @@ export function Navbar() {
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col space-y-2">
                 {navItems.map((navItem) => {
-                  const isActive = pathname === navItem.href;
+                  const isActive = pathname.startsWith(navItem.href);
 
                   return (
                     <Link
@@ -115,7 +110,7 @@ export function Navbar() {
                       className={cn(
                         "flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200",
                         isActive
-                          ? "bg-orange-500 text-white shadow-sm"
+                          ? "bg-primary text-primary-foreground shadow-sm"
                           : "text-muted-foreground hover:text-foreground hover:bg-accent"
                       )}
                     >

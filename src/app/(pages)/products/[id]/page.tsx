@@ -6,49 +6,46 @@ import { useParams } from "next/navigation";
 import { Product } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
-import { ShoppingCart, Heart, Truck, Shield, RotateCcw } from "lucide-react";
+import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Loader, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { renderStars } from "@/helpers/rating";
 import { SingleProductResponse } from "@/types";
 import { formatPrice } from "@/helpers/currency";
 import { apiServices } from "@/services/api";
+import toast from "react-hot-toast";
 
 export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState(0);
+  const [selectedImage, setSelectedImage] = useState(-1);
   const [isAdding, setIsAdding] = useState(false);
 
-  const { id } = useParams();
+  const { id = "" } = useParams();
 
   async function fetchProductDetails() {
-    try {
-      setLoading(true);
-      setError(null);
-      const data: SingleProductResponse = await fetch(`https://ecommerce.routemisr.com/api/v1/products/${id}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Failed to fetch product');
-          }
-          return res.json();
-        });
+    setLoading(true);
+    if (!(id instanceof Array)) {
+      const data: SingleProductResponse = await apiServices.getProductDetails(id);
       setProduct(data.data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
     }
+    else {
+      const data: SingleProductResponse = await apiServices.getProductDetails(id[0]);
+      setProduct(data.data);
+    }
+    setLoading(false);
   }
 
   useEffect(() => {
-    if (id) {
-      fetchProductDetails();
-    }
+    fetchProductDetails();
   }, [id]);
 
-  async function handleAddToCart(){
+  async function handleAddToCart() {
+    setIsAdding(true);
     const data = await apiServices.addProductToCart(product!._id)
+    toast.success(data.message);
+    setIsAdding(false);
+
   }
 
   if (loading) {
@@ -72,7 +69,7 @@ export default function ProductDetailPage() {
     );
   }
 
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -96,11 +93,10 @@ export default function ProductDetailPage() {
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border-2 cursor-pointer transition-colors ${
-                    selectedImage === index
-                      ? "border-primary"
-                      : "border-gray-200 hover:border-gray-300"
-                  }`}
+                  className={`relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border-2 cursor-pointer transition-colors ${selectedImage === index
+                    ? "border-primary"
+                    : "border-gray-200 hover:border-gray-300"
+                    }`}
                 >
                   <Image
                     src={image}
@@ -192,7 +188,9 @@ export default function ProductDetailPage() {
               className="flex-1"
               disabled={product.quantity === 0 || isAdding}
               onClick={handleAddToCart}
+
             >
+              {isAdding && <Loader2 />}
               <ShoppingCart className="h-5 w-5 mr-2" />
               {isAdding ? 'Adding...' : 'Add to Cart'}
             </Button>
@@ -233,7 +231,7 @@ export default function ProductDetailPage() {
           </div>
         </div>
       </div>
-            </div>
+    </div>
 
   );
 }

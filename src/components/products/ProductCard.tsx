@@ -30,14 +30,14 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
 
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-lg line-clamp-2">
-              <Link
-                href={`/products/${product.id}`}
-                className="hover:text-primary transition-colors"
-              >
-                {product.title}
-              </Link>
-            </h3>
+        <h3 className="font-semibold text-lg line-clamp-2">
+          <Link
+            href={`/products/${product._id}`}
+            className="hover:text-primary transition-colors"
+          >
+            {product.title}
+          </Link>
+        </h3>
             <Button variant="ghost" size="sm">
               <Heart className="h-4 w-4" />
             </Button>
@@ -135,7 +135,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
 
         {/* Title */}
         <h3 className="font-semibold text-sm mb-2 line-clamp-2 hover:text-primary transition-colors">
-          <Link href={`/products/${product.id}`}> {product.title}</Link>
+          <Link href={`/products/${product._id}`}> {product.title}</Link>
         </h3>
 
         {/* Rating */}

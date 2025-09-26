@@ -1,46 +1,64 @@
+import { CartResponse } from "@/interfaces/cart";
 import { ProductsResponse, SingleProductResponse } from "@/types";
 
-const baseUrl = "https://ecommerce.routemisr.com";
-
 class ApiServices {
-    baseUrl:string="";
+    private baseUrl: string;
 
     constructor() {
-        this.baseUrl = baseUrl;
+        this.baseUrl = "https://ecommerce.routemisr.com/";
+    }
+
+    private getHeaders() {
+        return {
+            "Content-Type": "application/json",
+            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDZiYmFkOWM5Y2Y2MDljNTcwMTY5NCIsIm5hbWUiOiJBaG1lZCBBYmQgQWwtTXV0aSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4OTAzMjQwLCJleHAiOjE3NjY2NzkyNDB9.bDHhxxxa_HBR0mjUVMbOKZyOI51VH5aQRI5Eg-lOftg"
+        };
     }
 
     async getAllProducts(): Promise<ProductsResponse> {
-        return await fetch(
-            "https://ecommerce.routemisr.com/api/v1/products"
-        ).then((res)=>res.json());
-    }
-
-    async getProductDetails(productId: string | string[]): Promise<SingleProductResponse> {
-        const id = Array.isArray(productId) ? productId[0] : productId;
-        const response = await fetch(`${this.baseUrl}/api/v1/products/${id}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    }
-
-    getHeader() {
-        return {
-            'Content-Type': 'application/json',
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNjhkMzJjOWQyMjIwNGRhNTE1ZDE0ZjJlIiwiaWF0IjoxNzU4Njc0Mjg3fQ.-P2CxL79yL1un5hqlWwl9GHta1yY3A1Nc0R3kVXMHwE"
+        try {
+            const response = await fetch(this.baseUrl + "api/v1/products");
+            if (!response.ok) {
+                throw new Error(`Error fetching products: ${response.status}`);
+            }
+            return response.json();
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     }
 
-    async addProductToCart(productId: string) {
-        const response = await fetch("https://ecommerce.routemisr.com/api/v1/cart", {
-            method: 'POST',
-            body: JSON.stringify({ product: productId }),
-            headers: this.getHeader()
-        })
-
+    async getProductDetails(_id: string): Promise<SingleProductResponse> {
+        try {
+            const response = await fetch(this.baseUrl + "api/v1/products/" + _id);
+            if (!response.ok) {
+                throw new Error(`Error fetching product ${_id}: ${response.status}`);
+            }
+            return response.json();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
+    async addProductToCart(productId: string): Promise<CartResponse> {
+        try {
+            const response = await fetch(this.baseUrl + "api/v1/cart", {
+                method: "POST",
+                body: JSON.stringify({ productId }),
+                headers: this.getHeaders(),
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error adding to cart: ${response.status}`);
+            }
+
+            return response.json();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
 }
-
 
 export const apiServices = new ApiServices();
