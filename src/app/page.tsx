@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="container mx-auto px-4 py-40">
       <div className="text-center space-y-6">
-        <h1 className="text-4xl font-bold tracking-tight lg:text-6xl">
+        <h1 className="text-4xl font-bold  lg:text-6xl">
           Welcome to TechMart
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
@@ -15,7 +15,7 @@ export default function Home() {
           Quality guaranteed with fast shipping and excellent customer service.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="text-lg px-8">
+          <Button size="lg" className="text-lg px-8 bg-orange-500">
             <Link href={"/products"}>Shop Now</Link>
           </Button>
           <Button variant="outline" size="lg" className="text-lg px-8">

@@ -7,9 +7,11 @@ import {
   Mail,
   Phone,
   MapPin,
+  Image,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import Imagefooter from "next/image";
 
 const footerSections = [
   {
@@ -69,14 +71,16 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center space-x-2 mb-4">
-              <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-lg">
-                  T
-                </span>
-              </div>
-              <span className="font-bold text-xl">TechMart</span>
-            </Link>
+          <Link href="/" className="flex items-center space-x-1 ">
+            <Imagefooter
+              src="/logo.png"
+              alt="Go Basket Logo"
+              width={32}
+              height={32}
+              className="h-10 w-10"
+            />
+            <span className="font-bold text-xl ">GoCart</span>
+          </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
               Your one-stop destination for the latest technology, fashion, and
               lifestyle products. Quality guaranteed with fast shipping and
@@ -158,7 +162,7 @@ export function Footer() {
                 placeholder="Enter your email"
                 className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
-              <Button type="submit">Subscribe</Button>
+              <Button className="bg-orange-500" type="submit">Subscribe</Button>
             </div>
           </div>
         </div>

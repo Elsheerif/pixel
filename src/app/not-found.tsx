@@ -37,9 +37,9 @@ export default function NotFound() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button asChild className="flex items-center gap-2">
+          <Button asChild className="flex items-center gap-2 bg-orange-500">
             <Link href="/">
-              <Home className="h-4 w-4" />
+              <Home className="h-4 w-4 " />
               Go Home
             </Link>
           </Button>
@@ -81,7 +81,7 @@ export default function NotFound() {
                 className="w-full rounded-md border border-input bg-background px-10 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
             </div>
-            <Button type="submit">
+            <Button type="submit" className="bg-orange-500">
               <ShoppingBag className="h-4 w-4 mr-2" />
               Search
             </Button>

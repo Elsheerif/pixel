@@ -8,6 +8,7 @@ import { ShoppingCart, Heart } from "lucide-react";
 import { renderStars } from "@/helpers/rating";
 import { formatPrice } from "@/helpers/currency";
 
+
 interface ProductCardProps {
   product: Product;
   viewMode?: "grid" | "list";
@@ -16,7 +17,7 @@ interface ProductCardProps {
 export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
   if (viewMode === "list") {
     return (
-      <div className="flex gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow">
+      <div className="flex gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow  ">
         <div className="relative w-32 h-32 flex-shrink-0">
           <Image
             src={product.imageCover}
@@ -86,8 +87,8 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
               </div>
             </div>
 
-            <Button>
-              <ShoppingCart className="h-4 w-4 mr-2" />
+            <Button className="bg-orange-500">
+              <ShoppingCart className="h-4 w-4 mr-2 " />
               Add to Cart
             </Button>
           </div>
@@ -97,12 +98,12 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
   }
 
   return (
-    <div className="group relative bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300">
+    <div className="group flex flex-col justify-between relative bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300">
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden">
         <Image
-          src="/file.svg"
-          alt="Product image"
+          src={product.imageCover}
+          alt={product.title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-300"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
@@ -129,18 +130,18 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
       <div className="p-4">
         {/* Brand */}
         <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wide">
-          Brand
+          {product.brand.name}
         </p>
 
         {/* Title */}
         <h3 className="font-semibold text-sm mb-2 line-clamp-2 hover:text-primary transition-colors">
-          Product Title
+          <Link href={`/products/${product.id}`}> {product.title}</Link>
         </h3>
 
         {/* Rating */}
         <div className="flex items-center gap-1 mb-2">
-          <div className="flex">{renderStars(5)}</div>
-          <span className="text-xs text-muted-foreground">({100})</span>
+          <div className="flex">{renderStars(product.ratingsAverage)}</div>
+          <span className="text-xs text-muted-foreground">{product.ratingsQuantity}</span>
         </div>
 
         {/* Category */}
@@ -149,21 +150,21 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
             href={""}
             className="hover:text-primary hover:underline transition-colors"
           >
-            Category name
+            {product.category.name}
           </Link>
         </p>
 
         {/* Price */}
         <div className="flex items-center justify-between mb-3">
           <span className="text-lg font-bold text-primary">
-            {formatPrice(1500)}
+            {formatPrice(product.price)}
           </span>
-          <span className="text-xs text-muted-foreground">1000 sold</span>
+          <span className="text-xs text-muted-foreground">{product.sold}</span>
         </div>
 
         {/* Add to Cart Button */}
-        <Button className="w-full" size="sm">
-          <ShoppingCart className="h-4 w-4 mr-2" />
+        <Button className="w-full bg-orange-500" size="sm">
+          <ShoppingCart className="h-4 w-4 mr-2 " />
           Add to Cart
         </Button>
       </div>

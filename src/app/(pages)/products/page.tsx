@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Grid, List } from "lucide-react";
 import { ProductsResponse } from "@/types";
 
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   async function fetchProducts() {
@@ -57,22 +58,22 @@ export default function ProductsPage() {
         </p>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4 mb-8">
-        <div className="flex items-center gap-2">
-          <div className="flex items-center border rounded-md">
+      <div className="flex flex-col lg:flex-row gap-4 mb-8 ">
+        <div className="flex items-center gap-2 ">
+          <div className="flex items-center border rounded-md ">
             <Button
               variant={viewMode === "grid" ? "default" : "ghost"}
               size="sm"
               onClick={() => setViewMode("grid")}
-              className="rounded-r-none"
+              className="rounded-r-none  "
             >
-              <Grid className="h-4 w-4" />
+              <Grid className="h-4 w-4 " />
             </Button>
             <Button
               variant={viewMode === "list" ? "default" : "ghost"}
               size="sm"
               onClick={() => setViewMode("list")}
-              className="rounded-l-none"
+              className="rounded-l-none "
             >
               <List className="h-4 w-4" />
             </Button>
@@ -93,7 +94,9 @@ export default function ProductsPage() {
             }`}
         >
           {products.map((product) => (
-            <ProductCard key={product._id} product={product} viewMode={viewMode} />
+            <ProductCard key={product._id}
+              product={product}
+              viewMode={viewMode} />
           ))}
         </div>
       )}
