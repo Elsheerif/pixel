@@ -26,7 +26,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
   async function handleAddToCart() {
     setIsAdding(true);
     const data = await apiServices.addProductToCart(product!._id)
-    toast.success(data.message);
+    toast.success("Product Added To Cart");
     setIsAdding(false);
 
   }
@@ -180,7 +180,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
 
         {/* Add to Cart Button */}
         <Button className="w-full bg-orange-500" size="sm" onClick={handleAddToCart}>
-                     {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
+          {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
           Add to Cart
         </Button>
       </div>

@@ -50,6 +50,20 @@ class ApiServices {
         return response.json();
     }
 
+        async clearCart(): Promise<GetUserCartResponse> {
+        const response = await fetch(this.baseUrl + "api/v1/cart", {
+            method: 'delete',
+            headers: this.getHeaders()
+        });
+        return response.json();
+    }
+    async updateProductQuantity(productId: string, count: number): Promise<GetUserCartResponse> {
+        const response = await fetch(this.baseUrl + "api/v1/cart/" + productId, {
+            method: 'put',
+            body: JSON.stringify({ count }),
+            headers: this.getHeaders()
+        });
+        return response.json();}
 
 }
 
