@@ -45,9 +45,9 @@ export default function BrandsPage() {
 
     return (
         <div className="bg-orange-50">
-            <div className="container mx-auto px-4 py-8">
+            <div className="container mx-auto px-4 py-5">
                 {/* Header */}
-                <div className="mb-8">
+                <div className="mb-3 sm:mb-3">
                     <h1 className="text-3xl font-bold mb-4">Brands</h1>
                     <p className="text-muted-foreground">
                         Explore our collection of trusted brands

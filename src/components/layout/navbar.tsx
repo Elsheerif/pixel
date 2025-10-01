@@ -27,13 +27,13 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 h-20 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 h-18 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container relative mx-auto px-4">
-        <div className="flex h-20 items-center justify-between">
+        <div className="flex h-18 items-center justify-between">
           {/* Left: Logo */}
           <Link href="/" className="flex items-center ml-2 space-x-1">
-            <img src="/logo.png" alt="Pixel" className="h-12 w-12" />
-            <span className="font-bold text-3xl">Pixel</span>
+            <img src="/logo.png" alt="Pixel" className="h-11 w-11" />
+            <span className="font-bold text-2xl">Pixel</span>
           </Link>
 
           {/* Center: Desktop Navigation (absolute true center) */}

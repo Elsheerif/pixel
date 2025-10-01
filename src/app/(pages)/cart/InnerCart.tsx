@@ -66,8 +66,8 @@ export default function InnerCart({ cartData }: InnerCartProps) {
     return (
         <>
             {/* Header */}
-            <div className="mb-8">
-                <h1 className="text-3xl font-bold mb-4">Shopping Cart</h1>
+            <div className="mb-5">
+                <h1 className="text-3xl font-bold mb-2">Shopping Cart</h1>
                 {innerCartData.numOfCartItems > 0 && <p className="text-muted-foreground">
                     There is {innerCartData.numOfCartItems} item
                     {innerCartData.numOfCartItems !== 1 ? "s" : ""} in your cart

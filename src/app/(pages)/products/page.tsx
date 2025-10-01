@@ -44,11 +44,16 @@ export default function ProductsPage() {
 
   return (
     <div className="bg-orange-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-5">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">Products</h1>
-          <p className="text-muted-foreground">
+        <div className="mb-3 sm:mb-3">
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">
+            Products
+          </h1>
+          <p className="text-sm sm:text-base text-muted-foreground block sm:hidden">
+            Explore our amazing products
+          </p>
+          <p className="text-sm sm:text-base text-muted-foreground hidden sm:block">
             Discover amazing products from our collection
           </p>
         </div>

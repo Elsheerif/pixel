@@ -1,3 +1,4 @@
+import { signIn } from 'next-auth/react';
 import { AddToCartResponse, GetUserCartResponse } from "@/interfaces/cart";
 import { ProductsResponse, SingleProductResponse } from "@/types";
 
@@ -50,7 +51,7 @@ class ApiServices {
         return response.json();
     }
 
-        async clearCart(): Promise<GetUserCartResponse> {
+    async clearCart(): Promise<GetUserCartResponse> {
         const response = await fetch(this.baseUrl + "api/v1/cart", {
             method: 'delete',
             headers: this.getHeaders()
@@ -63,9 +64,31 @@ class ApiServices {
             body: JSON.stringify({ count }),
             headers: this.getHeaders()
         });
-        return response.json();}
+        return response.json();
+    }
 
-}
+    async signIn(email: string, password: string) {
+        return await fetch(this.baseUrl + "api/v1/auth/signin", {
+            body: JSON.stringify({
+                email,
+                password
+            }),
+            headers: this.getHeaders(),
+            method: "POST"
+        }).then(res => res.json())
+    }
+
+
+    async signUp(name: string, email: string, password: string) {
+        const response = await fetch(this.baseUrl + '/api/v1/auth/signup', {
+            method: 'POST',
+            headers: this.getHeaders(),
+            body: JSON.stringify({ name, email, password }),
+        })
+        return response.json();
+    }
+};
+
 
 
 export const apiServices = new ApiServices();
