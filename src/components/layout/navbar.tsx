@@ -10,27 +10,15 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu";
-import { apiServices } from "@/services/api";
+
 import { cn } from "@/lib/utils";
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { cartContext } from "@/contexts/cartContext";
 
 export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-
-  useEffect(() => {
-    async function fetchCart() {
-      try {
-        const cartData = await apiServices.getUserCart();
-        setCartCount(cartData.numOfCartItems || cartData.data?._id?.length || 0);
-      } catch (error) {
-        console.error('Failed to fetch cart:', error);
-        setCartCount(0);
-      }
-    }
-    fetchCart();
-  }, []);
+  const { cartCount, isLoaded } = useContext(cartContext);
 
   const navItems = [
     { href: "/products", label: "Products" },
@@ -39,41 +27,44 @@ export function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <img src="/logo.png" alt="Go Basket Logo" className="h-8 w-8" />
-            <span className="font-bold text-xl">Go Cart</span>
+    <header className="sticky top-0 z-50 h-20 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container relative mx-auto px-4">
+        <div className="flex h-20 items-center justify-between">
+          {/* Left: Logo */}
+          <Link href="/" className="flex items-center ml-2 space-x-1">
+            <img src="/logo.png" alt="Pixel" className="h-12 w-12" />
+            <span className="font-bold text-3xl">Pixel</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <NavigationMenu className="hidden lg:flex">
-            <NavigationMenuList>
-              {navItems.map((navItem) => {
-                const isActive = pathname.startsWith(navItem.href);
-                return (
-                  <NavigationMenuItem key={navItem.href}>
-                    <NavigationMenuLink
-                      href={navItem.href}
-                      className={cn(
-                        "group inline-flex h-10 w-max items-center justify-center rounded-md px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-                        isActive
-                          ? "bg-primary text-primary-foreground shadow-md font-semibold"
-                          : "bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                      )}
-                    >
-                      {navItem.label}
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                );
-              })}
-            </NavigationMenuList>
-          </NavigationMenu>
+          {/* Center: Desktop Navigation (absolute true center) */}
+          <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 lg:flex">
+            <NavigationMenu>
+              <NavigationMenuList>
+                {navItems.map((navItem) => {
+                  const isActive =
+                    pathname === navItem.href || pathname.startsWith(navItem.href);
+                  return (
+                    <NavigationMenuItem key={navItem.href}>
+                      <NavigationMenuLink
+                        href={navItem.href}
+                        className={cn(
+                          "group inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-md font-medium transition-all duration-200 focus:outline-none",
+                          isActive
+                            ? "bg-orange-500 text-primary-foreground shadow-md font-semibold"
+                            : "bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                        )}
+                      >
+                        {navItem.label}
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                  );
+                })}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center space-x-2">
+          {/* Right: Action Buttons */}
+          <div className="flex items-center space-x-2 mr-2">
             {/* User Account */}
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
@@ -83,15 +74,15 @@ export function Navbar() {
             {/* Shopping Cart */}
             <Link href="/cart">
               <Button variant="ghost" size="icon" className="relative">
-              <ShoppingCart className="h-5 w-5 " />
-              <span className="absolute bg-orange-500 top-1 -right-1 w-4 h-4 rounded-full text-xs text-white flex items-center justify-center">
-                {cartCount}
-              </span>
-              <span className="sr-only">Shopping cart</span>
-            </Button>
+                <ShoppingCart className="h-5 w-5" />
+                <span className="absolute bg-orange-500 top-1 -right-1 w-4 h-4 rounded-full text-xs text-white flex items-center justify-center">
+                  {isLoaded ? (cartCount >= 99 ? "99+" : cartCount) : ""}
+                </span>
+                <span className="sr-only">Shopping cart</span>
+              </Button>
             </Link>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -110,12 +101,12 @@ export function Navbar() {
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden absolute start-0 end-0 border-t bg-background">
+          <div className="lg:hidden absolute left-0 right-0 border-t bg-background">
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col space-y-2">
                 {navItems.map((navItem) => {
-                  const isActive = pathname.startsWith(navItem.href);
-
+                  const isActive =
+                    pathname === navItem.href || pathname.startsWith(navItem.href);
                   return (
                     <Link
                       key={navItem.href}
@@ -124,7 +115,7 @@ export function Navbar() {
                       className={cn(
                         "flex items-center px-4 py-3 rounded-lg text-sm font-medium transition-all duration-200",
                         isActive
-                          ? "bg-primary text-primary-foreground shadow-sm"
+                          ? "bg-orange-500 text-primary-foreground shadow-sm"
                           : "text-muted-foreground hover:text-foreground hover:bg-accent"
                       )}
                     >

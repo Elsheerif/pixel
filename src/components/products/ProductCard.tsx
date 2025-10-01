@@ -9,7 +9,8 @@ import { renderStars } from "@/helpers/rating";
 import { formatPrice } from "@/helpers/currency";
 import { apiServices } from "@/services/api";
 import toast from 'react-hot-toast'
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { cartContext } from "@/contexts/cartContext";
 
 
 
@@ -23,9 +24,14 @@ interface ProductCardProps {
 
 export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
   const [isAdding, setIsAdding] = useState(false);
+  const { setcartCount } = useContext(cartContext);
+
   async function handleAddToCart() {
     setIsAdding(true);
     const data = await apiServices.addProductToCart(product!._id)
+    if (data && data.numOfCartItems !== undefined) {
+      setcartCount(data.numOfCartItems);
+    }
     toast.success("Product Added To Cart");
     setIsAdding(false);
 
@@ -34,7 +40,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
 
   if (viewMode === "list") {
     return (
-      <div className="flex gap-4 p-4 border rounded-lg hover:shadow-md transition-shadow  ">
+      <div className="flex gap-4 p-4 bg-white border rounded-lg hover:shadow-md transition-shadow  ">
         <div className="relative w-32 h-32 flex-shrink-0">
           <Image
             src={product.imageCover}
@@ -103,7 +109,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
                 </span>
               </div>
             </div>
-            <Button className=" bg-orange-500" size="sm" onClick={handleAddToCart}>
+            <Button className=" bg-orange-500 hover:bg-orange-600" size="sm" onClick={handleAddToCart}>
               {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
               Add to Cart
             </Button>
@@ -175,15 +181,28 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
           <span className="text-lg font-bold text-primary">
             {formatPrice(product.price)}
           </span>
-          <span className="text-xs text-muted-foreground">{product.sold}</span>
+          <span className="text-xs text-muted-foreground ">
+            {product.sold
+              ? (() => {
+                const soldStr = String(product.sold).replace(/[^0-9]/g, "");
+                const isMillion = soldStr.length >= 6;
+                const displayNum = Number(soldStr.slice(0, 4));
+                return isMillion ? `${displayNum.toLocaleString()}m` : displayNum.toLocaleString();
+              })()
+              : "N/A"} sold
+          </span>
+        </div>
+        {/* Add to Cart Button */}
+        <div>
+          <Button className="w-full bg-orange-500 hover:bg-orange-600" size="sm" onClick={handleAddToCart}>
+            {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
+            Add to Cart
+          </Button>
         </div>
 
-        {/* Add to Cart Button */}
-        <Button className="w-full bg-orange-500" size="sm" onClick={handleAddToCart}>
-          {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
-          Add to Cart
-        </Button>
       </div>
     </div>
+
+
   );
 }

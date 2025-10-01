@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Product } from "@/interfaces";
@@ -13,6 +13,7 @@ import { SingleProductResponse } from "@/types";
 import { formatPrice } from "@/helpers/currency";
 import { apiServices } from "@/services/api";
 import toast from 'react-hot-toast'
+import { cartContext } from "@/contexts/cartContext";
 
 
 
@@ -23,6 +24,7 @@ export default function ProductDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState(-1);
   const [isAdding, setIsAdding] = useState(false);
+  const { setcartCount } = useContext(cartContext);
 
   const { id = "" } = useParams();
 
@@ -46,6 +48,9 @@ export default function ProductDetailPage() {
   async function handleAddToCart() {
     setIsAdding(true);
     const data = await apiServices.addProductToCart(product!._id)
+    if (data && data.numOfCartItems !== undefined) {
+      setcartCount(data.numOfCartItems);
+    }
     toast.success(data.message);
     setIsAdding(false);
 
@@ -188,7 +193,7 @@ export default function ProductDetailPage() {
           <div className="flex gap-4">
             <Button
               size="lg"
-              className="flex-1"
+              className="flex-1 bg-orange-500 hover:bg-orange-600"
               disabled={product.quantity === 0 || isAdding}
               onClick={handleAddToCart}
 

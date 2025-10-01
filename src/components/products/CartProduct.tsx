@@ -8,6 +8,7 @@ import { Loader2, Minus, Plus, Trash2 } from "lucide-react";
 import { CartProduct as CartProductI, innerCartProduct } from "@/interfaces/cart";
 import { useState } from "react";
 
+
 interface CartProductProps {
     item: CartProductI<innerCartProduct>;
     handleRemove: (productId: string, setIsRemovingProduct: (value: boolean) => void) => void;
@@ -16,23 +17,19 @@ interface CartProductProps {
 
 export default function CartProduct({ item, handleRemove, handleUpdateQuantity }: CartProductProps) {
     const [isRemovingProduct, setIsRemovingProduct] = useState(false);
-    const [isIncrementing, setisIncrementing] = useState(false)
-    const [isDecrementing, setisDecrementing] = useState(false)
+    const [ProductCounter, setProductCounter] = useState(item.count)
+    const [timeOutid, settimeOutid] = useState<NodeJS.Timeout>()
 
-    async function handleIncrement(count: number) {
-        setisIncrementing(true)
-        if (handleUpdateQuantity) {
-            await handleUpdateQuantity(item.product._id, item.count + 1);
-        }
-        setisIncrementing(false)
-    }
 
-    async function handleDecrement(count: number) {
-        setisDecrementing(true)
-        if (handleUpdateQuantity) {
-            await handleUpdateQuantity(item.product._id, item.count - 1);
-        }
-        setisDecrementing(false)
+    async function handleUpdateCount(count: number) {
+        if (count >= 1 && count <= item.product.quantity) {
+            setProductCounter(count);
+            clearTimeout(timeOutid);}
+            const id = setTimeout(() => {
+                handleUpdateQuantity && handleUpdateQuantity(item.product._id, count);
+            }, 300);
+            settimeOutid(id);
+        
     }
 
 
@@ -89,21 +86,21 @@ export default function CartProduct({ item, handleRemove, handleUpdateQuantity }
                         variant="outline"
                         size="sm"
                         aria-label={`Decrease quantity of ${item.product.title}`}
-                        onClick={() => handleDecrement(item.count - 1)}
+                        onClick={() => handleUpdateCount(ProductCounter - 1)}
 
                     >
-                        {isDecrementing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Minus className="h-4 w-4" />}
+                        <Minus className="h-4 w-4" />
                     </Button>
-                    <span className="w-8 text-center">{item.count}</span>
+                    <span className="w-8 text-center">{ProductCounter}</span>
                     <Button
                         disabled={item.count == item.product.quantity}
                         variant="outline"
                         size="sm"
                         aria-label={`Increase quantity of ${item.product.title}`}
-                        onClick={() => handleIncrement(item.count + 1)}
+                        onClick={() => handleUpdateCount(ProductCounter + 1)}
 
                     >
-                        {isIncrementing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
+                        <Plus className="h-4 w-4" />
                     </Button>
                 </div>
             </div>

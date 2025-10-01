@@ -6,8 +6,11 @@ export default async function Cart() {
     const response = await apiServices.getUserCart();
 
     return (
-        <div className="container mx-auto px-4 py-8">
-            <InnerCart cartData={response}  />
+        <div className="bg-orange-50">
+            <div className="container mx-auto px-4 py-8">
+                <InnerCart cartData={response} />
+            </div>
         </div>
+
     );
 }

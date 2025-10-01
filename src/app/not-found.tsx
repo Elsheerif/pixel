@@ -49,25 +49,6 @@ export default function NotFound() {
           </Button>
         </div>
 
-        {/* Popular Categories */}
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Or explore popular categories:</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {popularCategories.map((category) => (
-              <Button
-                key={category.name}
-                variant="outline"
-                asChild
-                className="h-auto p-4 flex flex-col items-center space-y-2"
-              >
-                <Link href={category.href}>
-                  <span className="text-2xl">{category.icon}</span>
-                  <span className="text-sm">{category.name}</span>
-                </Link>
-              </Button>
-            ))}
-          </div>
-        </div>
 
         {/* Search Suggestion */}
         <div className="space-y-3 pt-4 border-t">

@@ -17,45 +17,44 @@ const footerSections = [
   {
     title: "Shop",
     links: [
-      { title: "Electronics", href: "/electronics" },
-      { title: "Fashion", href: "/fashion" },
-      { title: "Home & Garden", href: "/home" },
-      { title: "Sports", href: "/sports" },
-      { title: "Deals", href: "/deals" },
+      { title: "Electronics", href: "" },
+      { title: "Fashion", href: "" },
+      { title: "Home & Garden", href: "" },
+      { title: "Sports", href: "" },
+      { title: "Deals", href: "" },
     ],
   },
   {
     title: "Customer Service",
     links: [
-      { title: "Contact Us", href: "/contact" },
-      { title: "Help Center", href: "/help" },
-      { title: "Track Your Order", href: "/track" },
-      { title: "Returns & Exchanges", href: "/returns" },
-      { title: "Size Guide", href: "/size-guide" },
+      { title: "Contact Us", href: "" },
+      { title: "Help Center", href: "" },
+      { title: "Track Your Order", href: "" },
+      { title: "Returns & Exchanges", href: "" },
+      { title: "Size Guide", href: "" },
     ],
   },
   {
     title: "About",
     links: [
-      { title: "About TechMart", href: "/about" },
-      { title: "Careers", href: "/careers" },
-      { title: "Press", href: "/press" },
-      { title: "Investor Relations", href: "/investors" },
-      { title: "Sustainability", href: "/sustainability" },
+      { title: "About Pixel", href: "" },
+      { title: "Careers", href: "" },
+      { title: "Press", href: "" },
+      { title: "Investor Relations", href: "" },
+      { title: "Sustainability", href: "" },
     ],
   },
   {
     title: "Policies",
     links: [
-      { title: "Privacy Policy", href: "/privacy" },
-      { title: "Terms of Service", href: "/terms" },
-      { title: "Cookie Policy", href: "/cookies" },
-      { title: "Shipping Policy", href: "/shipping" },
-      { title: "Refund Policy", href: "/refunds" },
+      { title: "Privacy Policy", href: "" },
+      { title: "Terms of Service", href: "" },
+      { title: "Cookie Policy", href: "" },
+      { title: "Shipping Policy", href: "" },
+      { title: "Refund Policy", href: "" },
     ],
   },
 ];
-
 const socialLinks = [
   { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
   { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
@@ -74,13 +73,15 @@ export function Footer() {
           <Link href="/" className="flex items-center space-x-1 ">
             <Imagefooter
               src="/logo.png"
-              alt="Go Basket Logo"
+              alt="Pixel"
               width={32}
               height={32}
               className="h-10 w-10"
             />
-            <span className="font-bold text-xl ">GoCart</span>
+            <span className="font-bold text-xl ">Pixel</span>
+
           </Link>
+          <br />
             <p className="text-muted-foreground mb-4 max-w-md">
               Your one-stop destination for the latest technology, fashion, and
               lifestyle products. Quality guaranteed with fast shipping and
@@ -99,7 +100,7 @@ export function Footer() {
               </div>
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mail className="h-4 w-4" />
-                <span>support@techmart.com</span>
+                <span>support@PIXEL.com</span>
               </div>
             </div>
 
@@ -146,8 +147,8 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <Separator className="my-8" />
-        {/* Newsletter Signup */}
+        {/* <Separator className="my-8" /> */}
+        {/* Newsletter Signup
         <div>
           <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
             <div className="text-center md:text-left">
@@ -165,30 +166,30 @@ export function Footer() {
               <Button className="bg-orange-500" type="submit">Subscribe</Button>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        <Separator className="my-8" />
-
+        {/* <Separator className="my-8" /> */}
+          <br />
         {/* Bottom Footer */}
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 text-sm text-muted-foreground">
           <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
-            <p>&copy; 2024 TechMart. All rights reserved.</p>
+            <p>&copy; 2025 Pixel. All rights reserved.</p>
             <div className="hidden md:block">•</div>
             <div className="flex items-center space-x-4">
               <Link
-                href="/privacy"
+                href="/"
                 className="hover:text-foreground transition-colors"
               >
                 Privacy
               </Link>
               <Link
-                href="/terms"
+                href="/"
                 className="hover:text-foreground transition-colors"
               >
                 Terms
               </Link>
               <Link
-                href="/cookies"
+                href="/"
                 className="hover:text-foreground transition-colors"
               >
                 Cookies
