@@ -7,10 +7,17 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, Heart, Loader2 } from "lucide-react";
 import { renderStars } from "@/helpers/rating";
 import { formatPrice } from "@/helpers/currency";
+
 import { apiServices } from "@/services/api";
+
 import toast from 'react-hot-toast'
+
 import React, { useState, useContext } from "react";
+
 import { cartContext } from "@/contexts/cartContext";
+
+import { useSession } from "next-auth/react";
+
 
 
 
@@ -22,20 +29,51 @@ interface ProductCardProps {
 
 
 
+
 export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
+
   const [isAdding, setIsAdding] = useState(false);
+
   const { setcartCount } = useContext(cartContext);
 
+  const { data: session } = useSession();
+
   async function handleAddToCart() {
-    setIsAdding(true);
-    const data = await apiServices.addProductToCart(product!._id)
-    if (data && data.numOfCartItems !== undefined) {
-      setcartCount(data.numOfCartItems);
+
+    if (!session?.accessToken) {
+
+      toast.error("Please sign in to add to cart");
+
+      return;
+
     }
-    toast.success("Product Added To Cart");
-    setIsAdding(false);
+
+    setIsAdding(true);
+
+    try {
+
+      const data = await apiServices.addProductToCart(product!._id, session.accessToken)
+
+      if (data && data.numOfCartItems !== undefined) {
+
+        setcartCount(data.numOfCartItems);
+
+      }
+
+      toast.success("Product Added To Cart");
+
+    } catch {
+
+      toast.error("Failed to add to cart");
+
+    } finally {
+
+      setIsAdding(false);
+
+    }
 
   }
+
 
 
 

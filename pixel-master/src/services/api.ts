@@ -20,52 +20,96 @@ class ApiServices {
         ).then(res => res.json());
     }
 
-    getHeaders() {
-        return {
+    getHeaders(token?: string) {
+        const headers: any = {
             'Content-Type': 'application/json',
-            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDZiYmFkOWM5Y2Y2MDljNTcwMTY5NCIsIm5hbWUiOiJBaG1lZCBBYmQgQWwtTXV0aSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzU4OTAzMjQwLCJleHAiOjE3NjY2NzkyNDB9.bDHhxxxa_HBR0mjUVMbOKZyOI51VH5aQRI5Eg-lOftg"
+        };
+        if (token) {
+            headers.token = token;
         }
+        return headers;
     }
 
-    async addProductToCart(productId: string): Promise<AddToCartResponse> {
+
+    async addProductToCart(productId: string, token: string): Promise<AddToCartResponse> {
+
         const response = await fetch(this.baseUrl + "api/v1/cart", {
+
             method: 'post',
+
             body: JSON.stringify({ productId }),
-            headers: this.getHeaders()
+
+            headers: this.getHeaders(token)
+
         });
+
         return response.json();
+
     }
 
-    async getUserCart(): Promise<GetUserCartResponse> {
+
+
+    async getUserCart(token: string): Promise<GetUserCartResponse> {
+
         const response = await fetch(this.baseUrl + "api/v1/cart", {
-            headers: this.getHeaders()
+
+            headers: this.getHeaders(token)
+
         });
+
         return response.json();
+
     }
 
-    async removeProductFromCart(productId: string): Promise<GetUserCartResponse> {
+
+
+    async removeProductFromCart(productId: string, token: string): Promise<GetUserCartResponse> {
+
         const response = await fetch(this.baseUrl + "api/v1/cart/" + productId, {
+
             method: 'delete',
-            headers: this.getHeaders()
+
+            headers: this.getHeaders(token)
+
         });
+
         return response.json();
+
     }
 
-    async clearCart(): Promise<GetUserCartResponse> {
+
+
+    async clearCart(token: string): Promise<GetUserCartResponse> {
+
         const response = await fetch(this.baseUrl + "api/v1/cart", {
+
             method: 'delete',
-            headers: this.getHeaders()
+
+            headers: this.getHeaders(token)
+
         });
+
         return response.json();
+
     }
-    async updateProductQuantity(productId: string, count: number): Promise<GetUserCartResponse> {
+
+
+    async updateProductQuantity(productId: string, count: number, token: string): Promise<GetUserCartResponse> {
+
         const response = await fetch(this.baseUrl + "api/v1/cart/" + productId, {
+
             method: 'put',
+
             body: JSON.stringify({ count }),
-            headers: this.getHeaders()
+
+            headers: this.getHeaders(token)
+
         });
+
         return response.json();
+
     }
+
 
     async signIn(email: string, password: string) {
         const formData = new URLSearchParams();

@@ -18,7 +18,7 @@ import { signOut, useSession } from 'next-auth/react';
 export function Navbar() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { cartCount, isLoaded } = useContext(cartContext);
+  const { cartCount = 0, isLoaded } = useContext(cartContext);
   const { data, status } = useSession();
 
   const navItems = [
@@ -27,8 +27,12 @@ export function Navbar() {
     { href: '/categories', label: 'Categories' },
   ];
 
-  // Check if the current page is sign-in or sign-out
+  // Check if the current page is sign-in or sign-up
   const isAuthPage = pathname === '/auth/signin' || pathname === '/auth/signup';
+
+  const handleSignOut = async () => {
+    await signOut({ callbackUrl: '/' });
+  };
 
   return (
     <header className="sticky top-0 z-50 h-16 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -46,19 +50,21 @@ export function Navbar() {
               <NavigationMenuList className="flex space-x-1">
                 {navItems.map((navItem) => {
                   const isActive =
-                    pathname === navItem.href || pathname.startsWith(navItem.href);
+                    pathname === navItem.href || pathname.startsWith(navItem.href + '/');
                   return (
                     <NavigationMenuItem key={navItem.href}>
-                      <NavigationMenuLink
-                        href={navItem.href}
-                        className={cn(
-                          'group inline-flex h-9 items-center justify-center rounded-md px-3 sm:px-4 py-2 text-sm md:text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500',
-                          isActive
-                            ? 'bg-orange-500 text-primary-foreground shadow-md font-semibold'
-                            : 'bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
-                        )}
-                      >
-                        {navItem.label}
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href={navItem.href}
+                          className={cn(
+                            'group inline-flex h-9 items-center justify-center rounded-md px-3 sm:px-4 py-2 text-sm md:text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500',
+                            isActive
+                              ? 'bg-orange-500 text-primary-foreground shadow-md font-semibold'
+                              : 'bg-background hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'
+                          )}
+                        >
+                          {navItem.label}
+                        </Link>
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                   );
@@ -75,24 +81,16 @@ export function Navbar() {
                 size="icon"
                 aria-label="Loading authentication status"
                 className="h-8 w-8"
+                disabled
               >
                 <Loader className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
                 <span className="sr-only">Loading</span>
               </Button>
-            ) : status === 'authenticated' ? (
+            ) : status === 'authenticated' && data?.user ? (
               <>
                 <div className="flex items-center space-x-1 sm:space-x-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    aria-label="User account"
-                    className="h-8 w-8"
-                  >
-                    <User className="h-4 w-4 sm:h-5 sm:w-5" />
-                    <span className="sr-only">Account</span>
-                  </Button>
                   <p className="text-xs sm:text-sm truncate max-w-[80px] sm:max-w-[120px]">
-                    Hi, {data.user.name}
+                    Hi, {data.user.name || 'User'}
                   </p>
                 </div>
                 <Link href="/cart">
@@ -100,7 +98,7 @@ export function Navbar() {
                     variant="ghost"
                     size="icon"
                     className="relative h-8 w-8"
-                    aria-label={`Shopping cart with ${isLoaded ? cartCount : 0} items`}
+                    aria-label={`Shopping cart with ${cartCount} items`}
                   >
                     <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                     <span className="absolute bg-orange-500 top-0 -right-0.5 w-5 h-5 sm:w-4 sm:h-4 rounded-full text-xs text-white flex items-center justify-center">
@@ -116,7 +114,7 @@ export function Navbar() {
                   size="icon"
                   aria-label="Logout"
                   className="h-8 w-8"
-                  onClick={() => signOut()}
+                  onClick={handleSignOut}
                 >
                   <LogOut className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="sr-only">Logout</span>
@@ -157,7 +155,7 @@ export function Navbar() {
               <nav className="flex flex-col space-y-2">
                 {navItems.map((navItem) => {
                   const isActive =
-                    pathname === navItem.href || pathname.startsWith(navItem.href);
+                    pathname === navItem.href || pathname.startsWith(navItem.href + '/');
                   return (
                     <Link
                       key={navItem.href}

@@ -1,66 +1,213 @@
-"use client";
+ "use client";
+
 
 import { Button } from '@/components';
+
 import CartProduct from '@/components/products/CartProduct';
+
 import { cartContext } from '@/contexts/cartContext';
+
 import { formatPrice } from '@/helpers/currency';
+
 import { GetUserCartResponse } from '@/interfaces/cart';
+
 import { apiServices } from '@/services/api';
+
 import { Loader2, Trash2 } from 'lucide-react';
+
 import Link from 'next/link';
+
 import React, { useContext, useEffect, useState } from 'react';
+
 import toast from 'react-hot-toast';
 
+import { useSession } from 'next-auth/react';
+
+
+
 interface InnerCartProps {
-    cartData: GetUserCartResponse;
+
+    cartData: GetUserCartResponse | null;
+
 }
 
+
+
+
+const emptyCart: GetUserCartResponse = {
+
+    status: "success",
+
+    message: "",
+
+    numOfCartItems: 0,
+
+    cartId: "",
+
+    data: {
+
+        _id: "",
+
+        cartOwner: "",
+
+        products: [],
+
+        createdAt: "",
+
+        updatedAt: "",
+
+        totalCartPrice: 0,
+
+    },
+
+};
+
+
+
 export default function InnerCart({ cartData }: InnerCartProps) {
-    const [innerCartData, setInnerCartData] = useState<GetUserCartResponse>(cartData);
+
+    const { data: session } = useSession();
+
+    const [innerCartData, setInnerCartData] = useState<GetUserCartResponse>(cartData || emptyCart);
+
     const [isClearingcart, setisClearingcart] = useState(false)
+
     const { setcartCount } = useContext(cartContext)
+
 
     useEffect(() => {
         setcartCount(innerCartData.numOfCartItems)
     },)
+
     // Handle removing a product from the cart
+
     async function handleRemove(productId: string, setIsRemovingProduct: (value: boolean) => void) {
+
+        if (!session?.accessToken) return;
+
         setIsRemovingProduct(true);
+
         try {
-            await apiServices.removeProductFromCart(productId);
+
+            await apiServices.removeProductFromCart(productId, session.accessToken);
+
             toast.success("Product Removed Successfully", {
+
                 position: "bottom-right",
+
             });
+
             // Update state to reflect the removed product
+
             setInnerCartData((prev) => ({
+
                 ...prev,
+
                 numOfCartItems: prev.numOfCartItems - 1,
+
                 data: {
+
                     ...prev.data,
+
                     products: prev.data.products.filter((item) => item.product._id !== productId),
+
                     totalCartPrice: prev.data.products
+
                         .filter((item) => item.product._id !== productId)
+
                         .reduce((sum, item) => sum + item.price * item.count, 0),
+
                 },
+
             }));
+
         } catch  {
+
             toast.error("Failed to remove product", { position: "bottom-right" });
+
         } finally {
+
             setIsRemovingProduct(false);
+
         }
-    }
-    async function handleClearCart() {
-        setisClearingcart(true);
-        setisClearingcart(false);
-        const newCartData = await apiServices.getUserCart();
-        setInnerCartData(newCartData);
-        toast.success("Cart Cleared successfully", { position: "bottom-right" });
+
     }
 
-    async function handleUpdateQuantity() {
-        const newCartData = await apiServices.getUserCart();
-        setInnerCartData(newCartData);
+
+    async function handleClearCart() {
+
+        if (!session?.accessToken) return;
+
+        setisClearingcart(true);
+
+        try {
+
+            await apiServices.clearCart(session.accessToken);
+
+            setInnerCartData(emptyCart);
+
+            setcartCount(0);
+
+            toast.success("Cart Cleared successfully", { position: "bottom-right" });
+
+        } catch {
+
+            toast.error("Failed to clear cart", { position: "bottom-right" });
+
+        } finally {
+
+            setisClearingcart(false);
+
+        }
+
     }
+
+
+
+
+    async function handleUpdateQuantity(productId: string, count: number) {
+
+        if (!session?.accessToken) return;
+
+        try {
+
+            await apiServices.updateProductQuantity(productId, count, session.accessToken);
+
+            // Update local state
+
+            setInnerCartData((prev) => ({
+
+                ...prev,
+
+                data: {
+
+                    ...prev.data,
+
+                    products: prev.data.products.map((p) =>
+
+                        p.product._id === productId ? { ...p, count } : p
+
+                    ),
+
+                    totalCartPrice: prev.data.products.reduce((sum, p) =>
+
+                        sum + (p.product._id === productId ? p.price * count : p.price * p.count), 0
+
+                    ),
+
+                },
+
+            }));
+
+        } catch {
+
+            toast.error("Failed to update quantity", { position: "bottom-right" });
+
+        }
+
+    }
+
+
     return (
         <>
             {/* Header */}
