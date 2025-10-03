@@ -26,7 +26,7 @@ export default function CartProduct({ item, handleRemove, handleUpdateQuantity }
             setProductCounter(count);
             clearTimeout(timeOutid);}
             const id = setTimeout(() => {
-                handleUpdateQuantity && handleUpdateQuantity(item.product._id, count);
+                handleUpdateQuantity!(item.product._id, count);
             }, 200);
             settimeOutid(id);
         

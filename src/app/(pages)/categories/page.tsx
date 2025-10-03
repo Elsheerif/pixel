@@ -19,7 +19,7 @@ export default function CategoriesPage() {
             const response = await fetch("https://ecommerce.routemisr.com/api/v1/categories");
             const data = await response.json();
             setCategories(data.data as Category[]);
-        } catch (err) {
+        } catch {
             setError("Failed to load categories. Please try again.");
         } finally {
             setLoading(false);

@@ -1,64 +1,45 @@
 import { apiServices } from '../../../../services/api';
-import NextAuth from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
+import NextAuth from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
 
-export const handler = NextAuth({
+const handler = NextAuth({
     providers: [
         CredentialsProvider({
-            name: 'Credentials',
+            name: "Credentials",
             credentials: {
-                email: { label: 'Email', type: 'text', placeholder: 'someone@gmail.com' },
-                password: { label: 'Password', type: 'password' },
+                email: { label: "email", type: "text", placeholder: "someone@gmail.com" },
+                password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
-                    throw new Error('Email and password are required');
+                    return null;
                 }
-
                 try {
                     const response = await apiServices.signIn(credentials.email, credentials.password);
-                    if (response?.message === 'success') {
+                    console.log(response);
+                    if (response && response.message === 'success') {
                         return {
-                            id: response.user._id || response.user.email, // Prefer _id if available
-                            name: response.user.name,
-                            email: response.user.email,
-                            role: response.user.role || null,
-                            token: response.token || null,
+                            id: response.user?._id || "1",
+                            name: response.user?.name || "User",
+                            email: response.user?.email || credentials.email
                         };
+                    } else {
+                        return null;
                     }
-                    throw new Error('Invalid email or password');
                 } catch (error) {
-                    console.error('Sign-in error:', error);
-                    throw new Error('Authentication failed');
+                    console.error('Sign in error:', error);
+                    return null;
                 }
             },
         }),
     ],
     pages: {
-        signIn: '/auth/signin',
+        signIn: "/auth/signin",
     },
     session: {
-        strategy: 'jwt',
+        strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
-    callbacks: {
-        async jwt({ user, token }) {
-            if (user) {
-                token.accessToken = user.token || null;
-                token.role = user.role || null;
-            }
-            return token;
-        },
-        async session({ session, token }) {
-            if (token.role) {
-                session.user.role = token.role;
-            }
-            if (token.accessToken) {
-                session.accessToken = token.accessToken as string;
-            }
-            return session;
-        },
-    },
 });
 
 export { handler as GET, handler as POST };

@@ -8,7 +8,7 @@ export default function SignUpPage() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+    const [error] = useState('');
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -69,7 +69,7 @@ export default function SignUpPage() {
                     </button>
                 </form>
                 <p className="mt-4 text-sm text-gray-600 text-center">
-                    Already have an account?{' '}
+                    Already have an account?
                     <Link href="/auth/signin" className="text-orange-500 hover:underline">
                         Sign In
                     </Link>

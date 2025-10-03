@@ -19,7 +19,7 @@ export default function BrandsPage() {
             const response = await fetch("https://ecommerce.routemisr.com/api/v1/brands");
             const data = await response.json();
             setBrands(data.data as Brand[]);
-        } catch (err) {
+        } catch {
             setError("Failed to load brands. Please try again.");
         } finally {
             setLoading(false);

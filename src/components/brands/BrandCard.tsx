@@ -1,9 +1,9 @@
 "use client";
 
 import { Brand } from "@/interfaces";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import Image from "next/image";
+
 
 interface BrandCardProps {
     item: Brand;
@@ -24,7 +24,7 @@ export function BrandCard({ item, viewMode }: BrandCardProps) {
                     viewMode === "grid" ? "h-48 w-full" : "h-24 w-24 flex-shrink-0"
                 )}
             >
-                <img
+                <Image
                     src={item.image || "/placeholder-brand.png"}
                     alt={item.name}
                     className="h-full w-full object-contain rounded-t-lg"

@@ -1,5 +1,5 @@
 import { User } from 'lucide-react';
-import NextAuth from "next-auth"
+
 
 declare module "next-auth" {
     /**
@@ -13,8 +13,5 @@ declare module "next-auth" {
 
         } & DefaultSession["User"]
     }
-    interface User {
-        token: string;
-        role: string;
-    }
+
 }

@@ -1,4 +1,4 @@
-import { signIn } from 'next-auth/react';
+
 import { AddToCartResponse, GetUserCartResponse } from "@/interfaces/cart";
 import { ProductsResponse, SingleProductResponse } from "@/types";
 
@@ -96,7 +96,7 @@ class ApiServices {
             }
             try {
                 return JSON.parse(text);
-            } catch (error) {
+            } catch {
                 throw new Error(`Invalid JSON response from server: ${text}`);
             }
         } else {

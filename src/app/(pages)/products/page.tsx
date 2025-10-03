@@ -20,7 +20,7 @@ export default function ProductsPage() {
       const response = await fetch("https://ecommerce.routemisr.com/api/v1/Products");
       const data: ProductsResponse = await response.json();
       setProducts(data.data as Product[]);
-    } catch (err) {
+    } catch {
       setError("Failed to load products. Please try again.");
     } finally {
       setLoading(false);

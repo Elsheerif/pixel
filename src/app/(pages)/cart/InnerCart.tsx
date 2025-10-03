@@ -22,7 +22,7 @@ export default function InnerCart({ cartData }: InnerCartProps) {
 
     useEffect(() => {
         setcartCount(innerCartData.numOfCartItems)
-    }, [innerCartData])
+    },)
     // Handle removing a product from the cart
     async function handleRemove(productId: string, setIsRemovingProduct: (value: boolean) => void) {
         setIsRemovingProduct(true);
@@ -43,7 +43,7 @@ export default function InnerCart({ cartData }: InnerCartProps) {
                         .reduce((sum, item) => sum + item.price * item.count, 0),
                 },
             }));
-        } catch (error) {
+        } catch  {
             toast.error("Failed to remove product", { position: "bottom-right" });
         } finally {
             setIsRemovingProduct(false);
@@ -51,15 +51,13 @@ export default function InnerCart({ cartData }: InnerCartProps) {
     }
     async function handleClearCart() {
         setisClearingcart(true);
-        const response = await apiServices.clearCart();
         setisClearingcart(false);
         const newCartData = await apiServices.getUserCart();
         setInnerCartData(newCartData);
         toast.success("Cart Cleared successfully", { position: "bottom-right" });
     }
 
-    async function handleUpdateQuantity(productId: string, count: number) {
-        const response = await apiServices.updateProductQuantity(productId, count);
+    async function handleUpdateQuantity() {
         const newCartData = await apiServices.getUserCart();
         setInnerCartData(newCartData);
     }

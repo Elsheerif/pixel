@@ -6,7 +6,7 @@ import { useParams } from "next/navigation";
 import { Product } from "@/interfaces";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
-import { ShoppingCart, Heart, Truck, Shield, RotateCcw, Loader, Loader2 } from "lucide-react";
+import { ShoppingCart, Heart, Truck, Shield, RotateCcw,Loader2 } from "lucide-react";
 import Link from "next/link";
 import { renderStars } from "@/helpers/rating";
 import { SingleProductResponse } from "@/types";
@@ -21,7 +21,7 @@ import { cartContext } from "@/contexts/cartContext";
 export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState(-1);
   const [isAdding, setIsAdding] = useState(false);
   const { setcartCount } = useContext(cartContext);
@@ -43,7 +43,7 @@ export default function ProductDetailPage() {
 
   useEffect(() => {
     fetchProductDetails();
-  }, [id]);
+  },);
 
   async function handleAddToCart() {
     setIsAdding(true);

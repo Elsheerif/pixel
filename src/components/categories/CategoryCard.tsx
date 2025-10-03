@@ -1,15 +1,13 @@
 "use client";
 
 import { Category } from "@/interfaces";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+import Image from "next/image";
 
 interface CategoryCardProps {
     item: Category;
     viewMode: "grid" | "list";
 }
-
 export function CategoryCard({ item, viewMode }: CategoryCardProps) {
     return (
         <div
@@ -24,7 +22,7 @@ export function CategoryCard({ item, viewMode }: CategoryCardProps) {
                     viewMode === "grid" ? "h-48 w-full" : "h-24 w-24 flex-shrink-0"
                 )}
             >
-                <img
+                <Image
                     src={item.image || "/placeholder-category.png"}
                     alt={item.name}
                     className="h-full w-full object-contain rounded-t-lg"

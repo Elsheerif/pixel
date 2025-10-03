@@ -2,10 +2,8 @@
 
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Button } from '@/components';
-import { Link2 } from 'lucide-react';
+
 
 export default function SignInPage() {
     const [email, setEmail] = useState('');
@@ -73,7 +71,7 @@ export default function SignInPage() {
                     </button>
 
                     <p className="mt-4 text-sm text-gray-600 text-center">
-                    Don't have an account?{' '}
+                    Do not have an account?
                     <Link href="/auth/signup" className="text-orange-500 hover:underline">
                         Sign up
                     </Link>

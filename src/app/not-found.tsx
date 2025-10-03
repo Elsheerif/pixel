@@ -4,13 +4,6 @@ import { Search, Home, ArrowLeft, ShoppingBag } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function NotFound() {
-  const popularCategories = [
-    { name: "Electronics", href: "/electronics", icon: "📱" },
-    { name: "Fashion", href: "/fashion", icon: "👕" },
-    { name: "Home & Garden", href: "/home", icon: "🏠" },
-    { name: "Deals", href: "/deals", icon: "🔥" },
-  ]
-
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4">
       <div className="text-center space-y-8 max-w-2xl">

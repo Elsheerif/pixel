@@ -18,7 +18,7 @@ export default function Home() {
             Discover the latest technology, fashion, and lifestyle products. Quality guaranteed with fast shipping and excellent customer service.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Button size="lg" className="text-base sm:text-lg px-6 sm:px-2 bg-orange-500 hover:bg-orange-600">
+            <Button size="lg" className="text-base sm:text-lg px-6 sm:px-8 bg-orange-500 hover:bg-orange-600">
               <Link href={"/products"}>Shop Now</Link>
             </Button>
             <Button variant="outline" size="lg" className="text-base sm:text-lg px-6 sm:px-8">
