@@ -25,6 +25,7 @@ export function CategoryCard({ item, viewMode }: CategoryCardProps) {
                 <Image
                     src={item.image || "/placeholder-category.png"}
                     alt={item.name}
+                    fill
                     className="h-full w-full object-contain rounded-t-lg"
                 />
             </div>

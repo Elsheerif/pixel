@@ -22,7 +22,7 @@ export default function InnerCart({ cartData }: InnerCartProps) {
 
     useEffect(() => {
         setcartCount(innerCartData.numOfCartItems)
-    },)
+    }, [innerCartData])
     // Handle removing a product from the cart
     async function handleRemove(productId: string, setIsRemovingProduct: (value: boolean) => void) {
         setIsRemovingProduct(true);
@@ -43,7 +43,7 @@ export default function InnerCart({ cartData }: InnerCartProps) {
                         .reduce((sum, item) => sum + item.price * item.count, 0),
                 },
             }));
-        } catch  {
+        } catch (error) {
             toast.error("Failed to remove product", { position: "bottom-right" });
         } finally {
             setIsRemovingProduct(false);
@@ -51,21 +51,23 @@ export default function InnerCart({ cartData }: InnerCartProps) {
     }
     async function handleClearCart() {
         setisClearingcart(true);
+        const response = await apiServices.clearCart();
         setisClearingcart(false);
         const newCartData = await apiServices.getUserCart();
         setInnerCartData(newCartData);
         toast.success("Cart Cleared successfully", { position: "bottom-right" });
     }
 
-    async function handleUpdateQuantity() {
+    async function handleUpdateQuantity(productId: string, count: number) {
+        const response = await apiServices.updateProductQuantity(productId, count);
         const newCartData = await apiServices.getUserCart();
         setInnerCartData(newCartData);
     }
     return (
         <>
             {/* Header */}
-            <div className="mb-5">
-                <h1 className="text-3xl font-bold mb-2">Shopping Cart</h1>
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold mb-4">Shopping Cart</h1>
                 {innerCartData.numOfCartItems > 0 && <p className="text-muted-foreground">
                     There is {innerCartData.numOfCartItems} item
                     {innerCartData.numOfCartItems !== 1 ? "s" : ""} in your cart

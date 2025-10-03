@@ -1,4 +1,3 @@
-
 import { AddToCartResponse, GetUserCartResponse } from "@/interfaces/cart";
 import { ProductsResponse, SingleProductResponse } from "@/types";
 
@@ -29,7 +28,7 @@ class ApiServices {
 
     async addProductToCart(productId: string): Promise<AddToCartResponse> {
         const response = await fetch(this.baseUrl + "api/v1/cart", {
-            method: 'post',
+            method: 'POST',
             body: JSON.stringify({ productId }),
             headers: this.getHeaders()
         });
@@ -45,7 +44,7 @@ class ApiServices {
 
     async removeProductFromCart(productId: string): Promise<GetUserCartResponse> {
         const response = await fetch(this.baseUrl + "api/v1/cart/" + productId, {
-            method: 'delete',
+            method: 'DELETE',
             headers: this.getHeaders()
         });
         return response.json();
@@ -53,17 +52,23 @@ class ApiServices {
 
     async clearCart(): Promise<GetUserCartResponse> {
         const response = await fetch(this.baseUrl + "api/v1/cart", {
-            method: 'delete',
+            method: 'DELETE',
             headers: this.getHeaders()
         });
         return response.json();
     }
+
     async updateProductQuantity(productId: string, count: number): Promise<GetUserCartResponse> {
         const response = await fetch(this.baseUrl + "api/v1/cart/" + productId, {
-            method: 'put',
+            method: 'PUT',
             body: JSON.stringify({ count }),
             headers: this.getHeaders()
         });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to update quantity: ${response.status}`);
+        }
+        
         return response.json();
     }
 
@@ -112,8 +117,6 @@ class ApiServices {
         })
         return response.json();
     }
-};
-
-
+}
 
 export const apiServices = new ApiServices();

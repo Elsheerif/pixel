@@ -27,7 +27,8 @@ export function BrandCard({ item, viewMode }: BrandCardProps) {
                 <Image
                     src={item.image || "/placeholder-brand.png"}
                     alt={item.name}
-                    className="h-full w-full object-contain rounded-t-lg"
+                    fill
+                    className="object-contain rounded-t-lg"
                 />
             </div>
             <div
