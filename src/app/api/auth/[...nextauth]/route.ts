@@ -23,6 +23,8 @@ const handler = NextAuth({
                             id: response.user?._id,
                             name: response.user?.name,
                             email: response.user?.email,
+                            accessToken: response.token || null,
+                            role: response.user?.role || "user"
                         };
                     } else {
                         throw new Error("Invalid credentials");
