@@ -17,19 +17,21 @@ interface CartProductProps {
 
 export default function CartProduct({ item, handleRemove, handleUpdateQuantity }: CartProductProps) {
     const [isRemovingProduct, setIsRemovingProduct] = useState(false);
-    const [ProductCounter, setProductCounter] = useState(item.count)
-    const [timeOutid, settimeOutid] = useState<NodeJS.Timeout>()
+    const [ProductCounter, setProductCounter] = useState(item.count);
+    const [timeOutid, settimeOutid] = useState<NodeJS.Timeout>();
 
 
     async function handleUpdateCount(count: number) {
+        // Fixed: Proper brace placement for the condition
         if (count >= 1 && count <= item.product.quantity) {
             setProductCounter(count);
-            clearTimeout(timeOutid);}
+            clearTimeout(timeOutid);
+            
             const id = setTimeout(() => {
                 handleUpdateQuantity && handleUpdateQuantity(item.product._id, count);
             }, 250);
             settimeOutid(id);
-        
+        }
     }
 
 
@@ -82,23 +84,21 @@ export default function CartProduct({ item, handleRemove, handleUpdateQuantity }
 
                 <div className="flex items-center gap-2">
                     <Button
-                        disabled={item.count == 1}
+                        disabled={ProductCounter <= 1}
                         variant="outline"
                         size="sm"
                         aria-label={`Decrease quantity of ${item.product.title}`}
                         onClick={() => handleUpdateCount(ProductCounter - 1)}
-
                     >
                         <Minus className="h-4 w-4" />
                     </Button>
                     <span className="w-8 text-center">{ProductCounter}</span>
                     <Button
-                        disabled={item.count == item.product.quantity}
+                        disabled={ProductCounter >= item.product.quantity}
                         variant="outline"
                         size="sm"
                         aria-label={`Increase quantity of ${item.product.title}`}
                         onClick={() => handleUpdateCount(ProductCounter + 1)}
-
                     >
                         <Plus className="h-4 w-4" />
                     </Button>
