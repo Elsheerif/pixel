@@ -38,57 +38,55 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
   }
 
 
+
   if (viewMode === "list") {
     return (
-      <div className="flex gap-4 p-4 bg-white border rounded-lg hover:shadow-md transition-shadow  ">
-        <div className="relative w-32 h-32 flex-shrink-0">
+      <div className="flex gap-3 sm:gap-4 p-3 sm:p-4 bg-white border rounded-lg hover:shadow-md transition-shadow">
+        <div className="relative w-24 sm:w-32 h-24 sm:h-32 flex-shrink-0">
+        <Link href={`/products/${product._id}`}>
           <Image
             src={product.imageCover}
             alt={product.title}
             fill
-            className="object-cover rounded-md"
-            sizes="128px"
+            className="object-contain rounded-md"
+            sizes="(max-width: 640px) 96px, 128px"
           />
+          </Link>
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-lg line-clamp-2">
+            <h3 className="font-semibold text-base sm:text-lg line-clamp-2">
               <Link
                 href={`/products/${product._id}`}
-                className="hover:text-primary transition-colors"
+                className="hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 {product.title}
               </Link>
             </h3>
-            <Button variant="ghost" size="sm">
-              <Heart className="h-4 w-4" />
-            </Button>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-2 sm:mb-3 line-clamp-2">
             {product.description}
           </p>
 
-          <div className="flex items-center gap-4 mb-3">
+          <div className="flex items-center gap-2 sm:gap-4 mb-2 sm:mb-3">
             <div className="flex items-center gap-1">
               {renderStars(product.ratingsAverage)}
-              <span className="text-sm text-muted-foreground ml-1">
+              <span className="text-xs sm:text-sm text-muted-foreground ml-1">
                 ({product.ratingsQuantity})
               </span>
             </div>
 
-            <span className="text-sm text-muted-foreground">
-              {product.sold} sold
-            </span>
+          
           </div>
 
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <div className="flex flex-col gap-1">
-              <span className="text-2xl font-bold text-primary">
-                {formatPrice(product.price)}
+              <span className="text-lg sm:text-2xl font-bold text-primary">
+                {formatPrice(product.price).slice(0,9)}
               </span>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                 <span>
                   Brand:{" "}
                   <Link
@@ -109,8 +107,17 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
                 </span>
               </div>
             </div>
-            <Button className=" bg-orange-500 hover:bg-orange-600" size="sm" onClick={handleAddToCart}>
-              {isAdding ? <Loader2 className='animate-spin' /> : <ShoppingCart className="h-4 w-4 mr-2 " />}
+            <Button
+              className="bg-orange-500 hover:bg-orange-600 text-xs sm:text-sm px-2 sm:px-3"
+              size="sm"
+              onClick={handleAddToCart}
+              aria-label="Add to cart"
+            >
+              {isAdding ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-1 sm:mr-2" />
+              ) : (
+                <ShoppingCart className="h-4 w-4 mr-1 sm:mr-2" />
+              )}
               Add to Cart
             </Button>
           </div>
@@ -119,10 +126,12 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
     );
   }
 
+
   return (
     <div className="group flex flex-col justify-between relative bg-white border rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300">
       {/* Product Image */}
       <div className="relative aspect-square overflow-hidden">
+      <Link href={`/products/${product._id}`}>
         <Image
           src={product.imageCover}
           alt={product.title}
@@ -130,6 +139,7 @@ export function ProductCard({ product, viewMode = "grid" }: ProductCardProps) {
           className="object-cover group-hover:scale-105 transition-transform duration-300"
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
         />
+        </Link>
 
         {/* Wishlist Button */}
         <Button

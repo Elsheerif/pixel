@@ -5,7 +5,7 @@ export default function Home() {
 
 
   return (
-    <div className="bg-orange-50 min-h-[50vh] flex items-center">
+    <div className="bg-orange-50 min-h-[90vh] flex items-center">
       <div className="container mx-auto px-4 py-16 sm:py-24 md:py-32">
         <div className="text-center space-y-4 sm:space-y-6">
           <h1 className="text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
@@ -18,7 +18,7 @@ export default function Home() {
             Discover the latest technology, fashion, and lifestyle products. Quality guaranteed with fast shipping and excellent customer service.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-            <Button size="lg" className="text-base sm:text-lg px-6 sm:px-8 bg-orange-500 hover:bg-orange-600">
+            <Button size="lg" className="text-base sm:text-lg px-6 sm:px-2 bg-orange-500 hover:bg-orange-600">
               <Link href={"/products"}>Shop Now</Link>
             </Button>
             <Button variant="outline" size="lg" className="text-base sm:text-lg px-6 sm:px-8">

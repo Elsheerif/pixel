@@ -51,7 +51,7 @@ export default function ProductDetailPage() {
     if (data && data.numOfCartItems !== undefined) {
       setcartCount(data.numOfCartItems);
     }
-    toast.success(data.message);
+    toast.success("Product Added To Cart");
     setIsAdding(false);
 
   }

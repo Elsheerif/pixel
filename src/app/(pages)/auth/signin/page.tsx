@@ -2,11 +2,16 @@
 
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components';
+import { Link2 } from 'lucide-react';
 
 export default function SignInPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -18,9 +23,12 @@ export default function SignInPage() {
         });
         if (result?.error) {
             setError('Invalid credentials');
+            console.log(setError);
+
         } else {
-            // Redirect or handle success
-            window.location.href = '/'; // or use router
+
+            window.location.href = '/';
+
         }
     };
 
@@ -59,9 +67,18 @@ export default function SignInPage() {
                         className="w-full bg-orange-500 text-white py-2 px-4 rounded-md
                                 hover:bg-orange-600 focus:outline-none focus:ring-2
                                 focus:ring-offset-2 focus:ring-orange-500 text-sm"
+                        onClick={handleSubmit}
                     >
                         Sign In
                     </button>
+
+                    <p className="mt-4 text-sm text-gray-600 text-center">
+                    Don't have an account?{' '}
+                    <Link href="/auth/signup" className="text-orange-500 hover:underline">
+                        Sign up
+                    </Link>
+                </p>
+
                 </form>
             </div>
         </div>

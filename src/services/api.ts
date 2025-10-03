@@ -68,16 +68,41 @@ class ApiServices {
     }
 
     async signIn(email: string, password: string) {
-        return await fetch(this.baseUrl + "api/v1/auth/signin", {
-            body: JSON.stringify({
-                email,
-                password
-            }),
-            headers: this.getHeaders(),
-            method: "POST"
-        }).then(res => res.json())
-    }
+        const formData = new URLSearchParams();
+        formData.append('email', email);
+        formData.append('password', password);
 
+        const response = await fetch(this.baseUrl + 'api/v1/auth/signin', {
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            method: "POST"
+        });
+
+        console.log('Sign in response status:', response.status);
+        const contentType = response.headers.get('content-type');
+        console.log('Content-Type:', contentType);
+
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`HTTP error! status: ${response.status}, body: ${text}`);
+        }
+
+        if (contentType && contentType.includes('application/json')) {
+            const text = await response.text();
+            if (!text) {
+                throw new Error('Empty JSON response from server');
+            }
+            try {
+                return JSON.parse(text);
+            } catch (error) {
+                throw new Error(`Invalid JSON response from server: ${text}`);
+            }
+        } else {
+            throw new Error('Server returned non-JSON response');
+        }
+    }
 
     async signUp(name: string, email: string, password: string) {
         const response = await fetch(this.baseUrl + '/api/v1/auth/signup', {
