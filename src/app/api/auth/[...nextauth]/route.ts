@@ -1,34 +1,35 @@
-import { apiServices } from '../../../../services/api';
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
+import { apiServices } from "../../../../services/api";
+import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 const handler = NextAuth({
     providers: [
         CredentialsProvider({
             name: "Credentials",
             credentials: {
-                email: { label: "email", type: "text", placeholder: "someone@gmail.com" },
+                email: { label: "Email", type: "text", placeholder: "someone@gmail.com" },
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
-                    return null;
+                    throw new Error("Missing email or password");
                 }
+
                 try {
                     const response = await apiServices.signIn(credentials.email, credentials.password);
-                    console.log(response);
-                    if (response && response.message === 'success') {
+
+                    if (response && response.message === "success") {
                         return {
-                            id: response.user?._id || "1",
-                            name: response.user?.name || "User",
-                            email: response.user?.email || credentials.email
+                            id: response.user?._id,
+                            name: response.user?.name,
+                            email: response.user?.email,
                         };
                     } else {
-                        return null;
+                        throw new Error("Invalid credentials");
                     }
                 } catch (error) {
-                    console.error('Sign in error:', error);
-                    return null;
+                    console.error("Sign in error:", error);
+                    throw new Error("Login failed. Please try again.");
                 }
             },
         }),
@@ -40,7 +41,7 @@ const handler = NextAuth({
         strategy: "jwt",
     },
     secret: process.env.NEXTAUTH_SECRET,
-        callbacks: {
+    callbacks: {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
@@ -50,7 +51,7 @@ const handler = NextAuth({
             return token;
         },
         async session({ session, token }) {
-            if (token) {
+            if (session.user) {
                 session.user.id = token.id as string;
                 session.user.name = token.name as string;
                 session.user.email = token.email as string;
