@@ -42,8 +42,8 @@ export default function ProductDetailPage() {
   }
 
   useEffect(() => {
-    fetchProductDetails();
-  },);
+  fetchProductDetails();
+}, [id]);
 
   async function handleAddToCart() {
     setIsAdding(true);
