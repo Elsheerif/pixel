@@ -1,2 +1,0 @@
-- [x] Add loading state and error handling for quantity updates in CartProduct.tsx
-- [ ] Test quantity update functionality in browser
